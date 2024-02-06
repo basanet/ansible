@@ -1,12 +1,14 @@
 - name: Install Traefik
   hosts: host
-  gather_facts: no
+  gather_facts: false
   tasks:
-    - docker_compose:
+    - name: Delete Traefik 
+      docker_compose:
         project_src: traefik
         state: absent
 
-    - docker_compose:
+    - name: Install Traefik
+      docker_compose:
         project_name: traefik
         definition:
           version: '3.9'
