@@ -47,4 +47,15 @@
         - "etc/docker/cert.pem"
         - "etc/docker/daemon.json"
         - "etc/docker/key.pem"
+    - name: Create docker daemon directory
+      ansible.builtin.file:
+        path: "/etc/systemd/system/docker.service.d/"
+        state: directory
+    - name: Copy modified daemon
+      ansible.builtin.copy:
+        src: "etc/systemd/system/docker.service.d/override.conf"
+        dest: "/etc/docker/"
+    - name: Just force systemd to reread configs (2.4 and above)
+      ansible.builtin.systemd_service:
+        daemon_reload: true
         
