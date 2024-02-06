@@ -1,5 +1,7 @@
 - name: install docker
   hosts: host
+  collections:
+    - community.docker
   tasks:
     - name: Install aptitude
       apt:
