@@ -12,6 +12,7 @@
       stat:
         path: /var/run/reboot-required
       register: p
-    - debug:
-        msg: "Reboot required"
+    - name: rebooting server
+      ansible.builtin.reboot:
+        reboot_timeout: 300
       when: p.stat.exists
