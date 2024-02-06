@@ -39,6 +39,6 @@
         update_cache: true
         
     - name: Copy file with owner and permissions
-        ansible.builtin.copy:
-          src: foo.conf
-          dest: /tmp/foo.conf
+      ansible.builtin.copy:
+        src: foo.conf
+        dest: /tmp/foo.conf
