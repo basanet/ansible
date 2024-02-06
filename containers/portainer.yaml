@@ -1,17 +1,15 @@
 - name: install Portainer
   hosts: host
   gather_facts: false
-  module_defaults:
-    community.docker.docker:
-      tls: true
-      validate_certs: false
-      docker_host: tcp://host:2375
-      ca_path: certs/cacert.pem
-      cert_path: certs/cert.pem
-      key_path: certs/key.pem
-      timeout: 120
   tasks:
-    - name: Pull image
-      community.docker.docker_image_pull:
-        name: python
-        tag: 3.12
+    - name: Deploy Portainer
+      community.docker.docker_container:
+        name: portainer
+        image: portainer/portainer-ce
+        ports:
+          - "9000:9000"
+          - "8000:8000"
+        volumes:
+          - /var/run/docker.sock:/var/run/docker.sock
+          - portainer_data:/data
+        restart_policy: always
