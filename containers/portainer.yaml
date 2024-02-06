@@ -1,1 +1,18 @@
-
+- name: install Portainer
+  hosts: host
+  gather_facts: false
+  module_defaults:
+    community.docker.docker:
+      tls: true
+      validate_certs: false
+      docker_host: tcp://host:2375
+      ca_path: certs/cacert.pem
+      cert_path: certs/cert.pem
+      key_path: certs/key.pem
+      timeout: 120
+      tls_hostname: *.basanet.net
+  tasks:
+    - name: Pull image
+      community.docker.docker_image_pull:
+        name: python
+        tag: 3.12
