@@ -15,6 +15,12 @@
         state: latest
         update_cache: true
         
+    - name: Install python 3.10.12
+      apt:
+        name: python=3.10.12
+        state: present
+        allow_downgrade: yes
+        
     - name: Install required system packages
       apt:
         pkg:
