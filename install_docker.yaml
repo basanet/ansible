@@ -37,9 +37,8 @@
         name: docker-ce
         state: latest
         update_cache: true
-    
-    - name: Container present
-      docker_container:
-        name: mycontainer
-        state: present
-        image: ubuntu:14.04
+        
+    - name: Copy file with owner and permissions
+        ansible.builtin.copy:
+          src: foo.conf
+          dest: /tmp/foo.conf
