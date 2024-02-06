@@ -1,0 +1,90 @@
+- name: Build new Docker host
+  hosts: host
+  gather_facts: yes
+  collections:
+    - community.docker
+  tasks:
+    - name: install net-tools
+      ansible.builtin.apt:
+        name: net-tools
+        state: present
+
+    - name: Install aptitude
+      apt:
+        name: aptitude
+        state: latest
+        update_cache: true
+        
+    - name: Install required system packages
+      apt:
+        pkg:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+          - python3-pip
+          - virtualenv
+          - python3-setuptools
+        state: latest
+        update_cache: true
+
+    - name: Add Docker GPG apt Key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Add Docker Repository
+      apt_repository:
+        repo: deb https://download.docker.com/linux/ubuntu focal stable
+        state: present
+
+    - name: Update apt and install docker-ce
+      apt:
+        name: docker-ce
+        state: latest
+        update_cache: true
+        
+    - name: Copy daemon config and certs
+      ansible.builtin.copy:
+        src: "{{item}}"
+        dest: "/etc/docker/"
+      with_items:
+        - "etc/docker/cacert.pem"
+        - "etc/docker/cert.pem"
+        - "etc/docker/daemon.json"
+        - "etc/docker/key.pem"
+
+    - name: Create docker daemon directory
+      ansible.builtin.file:
+        path: "/etc/systemd/system/docker.service.d/"
+        state: directory
+
+    - name: Copy modified daemon
+      ansible.builtin.copy:
+        src: "etc/systemd/system/docker.service.d/override.conf"
+        dest: "/etc/systemd/system/docker.service.d/override.conf"
+
+    - name: Just force systemd to reread configs (2.4 and above)
+      ansible.builtin.systemd_service:
+        daemon_reload: true
+
+    - name: restart docker
+      systemd:
+        name: docker
+        state: restarted
+
+    - name: Upgrade all packages
+      apt:
+        name: "*"
+        state: latest
+        update_cache: true
+
+    - name: Check that the reboot-requied exists
+      stat:
+        path: /var/run/reboot-required
+      register: p
+
+    - name: rebooting server
+      ansible.builtin.reboot:
+        reboot_timeout: 300
+      when: p.stat.exists
