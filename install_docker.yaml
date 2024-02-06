@@ -38,7 +38,7 @@
         state: latest
         update_cache: true
         
-    - name: Copy file with owner and permissions
+    - name: Copy daemon config and certs
       ansible.builtin.copy:
-        src: foo.conf
-        dest: /tmp/foo.conf
+        src: etc/docker/*
+        dest: /etc/docker/
