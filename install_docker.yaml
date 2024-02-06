@@ -40,4 +40,9 @@
       pip:
         name: docker
 
+    - name: Pull Ubuntu image
+      docker_image:
+        name: "ubuntu:20.04"
+        source: pull
+
 
