@@ -10,7 +10,7 @@
       cert_path: certs/cert.pem
       key_path: certs/key.pem
       timeout: 120
-      tls_hostname: "*.basanet.net"
+      tls_hostname: docker.basanet.net
   tasks:
     - name: Pull image
       community.docker.docker_image_pull:
