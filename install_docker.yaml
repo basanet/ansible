@@ -42,9 +42,9 @@
       ansible.builtin.copy:
         src: {{ item }}
         dest: /etc/docker/
-      loop:
-        - etc/docker/cacert.pem
-        - etc/docker/cert.pem
-        - etc/docker/daemon.json
-        - etc/docker/key.pem
+        loop:
+          - etc/docker/cacert.pem
+          - etc/docker/cert.pem
+          - etc/docker/daemon.json
+          - etc/docker/key.pem
         
