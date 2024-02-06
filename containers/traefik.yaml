@@ -1,7 +1,7 @@
 - name: install Traefik
   hosts: host
   gather_facts: false
-  task:
+  tasks:
     - name: Deploy Traefik
       community.docker.docker_container:
         name: traefik
