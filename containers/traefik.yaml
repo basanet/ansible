@@ -1,82 +1,60 @@
-- name: Install Traefik
+- name: install Traefik
   hosts: host
   gather_facts: false
-  tasks:
-    - name: Delete Traefik 
-      docker_compose:
-        project_src: traefik
-        state: absent
-
-    - name: Install Traefik
-      docker_compose:
-        project_name: traefik
-        definition:
-          version: '3.9'
-          services:
-            traefik:
-              image: traefik:latest
-              network_mode: host
-              labels:
-                - "traefik.http.middlewares.test-auth.forwardauth.trustForwardHeader=true"
-              command:    
-                - --log.level=DEBUG
-                - --log.filePath=/logs/traefik.log
-                - --accesslog=true
-                - --accesslog.filepath=/logs/access.log
-                - --accesslog.format=json
-                #- --entrypoints.web.address=:80
-                - --entrypoints.web-secure.address=:443
-                - --entrypoints.mqtt.address=:1883
-                - --entrypoints.mqtt-secure.address=:8883
-                #- --entrypoints.dns-secure.address=:853
-                #- --entrypoints.imaps.address=:993
-                #- --entrypoints.imap.address=:143
-                #- --entrypoints.pop3.address=:110
-                #- --entrypoints.smtp.address=:25
-                #- --entrypoints.pop3s.address=:995
-                #- --entrypoints.smtps.address=:465
-                - --providers.docker
-                - --providers.docker.exposedbydefault=false
-                - --providers.docker.network=public
-                - --providers.file.directory=/configuration/
-                - --providers.file.watch=true
-                - --api
-                - --api.insecure=true
-                - --api.dashboard=true
-                - --certificatesresolvers.le.acme.email=balogh.sandor@basanet.net
-                - --certificatesresolvers.le.acme.storage=/configuration/acme.json
-                - --certificatesresolvers.le.acme.tlschallenge=true
-                - --serverstransport.insecureskipverify=true
-              container_name: traefik
-              environment:
-                AWS_ACCESS_KEY_ID: AKIA6MYX7E7RFAXMNCNI
-                AWS_SECRET_ACCESS_KEY: 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
-                AWS_REGION: us-east-1
-                AWS_HOSTED_ZONE_ID: Z02153267AA8XBTFFM4R
-              ports:
-                #- "995:995"
-                #- "993:993"
-                #- "465:465"
-                - "443:443"
-                #- "853:853"
-                #- "8080:8080"
-                #- "524:524"
-                #- "8443:8443"
-              volumes:
-                - "/var/run/docker.sock:/var/run/docker.sock:ro"
-                - traefik_configuration:/configuration
-                - traefik_logs:/logs
-              restart: always
-              
-          volumes:
-            traefik_configuration:
-              external: true
-            traefik_logs:
-              external: true
-      register: output
-    - debug:
-        var: output
-
-    - assert:
-        that:
-          - "traefik.traefik_traefik_1.state.running"
+  task:
+    - name: Deploy Traefik
+      community.docker.docker_container:
+        name: traefik
+        image: traefik:latest
+        network_mode: host
+        labels:
+          - "traefik.http.middlewares.test-auth.forwardauth.trustForwardHeader=true"
+        command:    
+          - --log.level=DEBUG
+          - --log.filePath=/logs/traefik.log
+          - --accesslog=true
+          - --accesslog.filepath=/logs/access.log
+          - --accesslog.format=json
+          #- --entrypoints.web.address=:80
+          - --entrypoints.web-secure.address=:443
+          - --entrypoints.mqtt.address=:1883
+          - --entrypoints.mqtt-secure.address=:8883
+          #- --entrypoints.dns-secure.address=:853
+          #- --entrypoints.imaps.address=:993
+          #- --entrypoints.imap.address=:143
+          #- --entrypoints.pop3.address=:110
+          #- --entrypoints.smtp.address=:25
+          #- --entrypoints.pop3s.address=:995
+          #- --entrypoints.smtps.address=:465
+          - --providers.docker
+          - --providers.docker.exposedbydefault=false
+          - --providers.docker.network=public
+          - --providers.file.directory=/configuration/
+          - --providers.file.watch=true
+          - --api
+          - --api.insecure=true
+          - --api.dashboard=true
+          - --certificatesresolvers.le.acme.email=s.balogh@proforall.ch
+          - --certificatesresolvers.le.acme.storage=/configuration/acme.json
+          - --certificatesresolvers.le.acme.tlschallenge=true
+          - --serverstransport.insecureskipverify=true
+        container_name: traefik
+        environment:
+          AWS_ACCESS_KEY_ID: AKIA6MYX7E7RFAXMNCNI
+          AWS_SECRET_ACCESS_KEY: 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
+          AWS_REGION: us-east-1
+          AWS_HOSTED_ZONE_ID: Z02153267AA8XBTFFM4R
+        ports:
+          #- "995:995"
+          #- "993:993"
+          #- "465:465"
+          - "443:443"
+          #- "853:853"
+          #- "8080:8080"
+          #- "524:524"
+          #- "8443:8443"
+        volumes:
+          - "/var/run/docker.sock:/var/run/docker.sock:ro"
+          - traefik_configuration:/configuration
+          - traefik_logs:/logs
+        restart: always
