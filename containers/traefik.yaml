@@ -7,8 +7,6 @@
         name: traefik
         image: traefik:latest
         network_mode: host
-        labels:
-          - "traefik.http.middlewares.test-auth.forwardauth.trustForwardHeader=true"
         command:    
           - --log.level=DEBUG
           - --log.filePath=/logs/traefik.log
