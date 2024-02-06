@@ -40,8 +40,11 @@
         
     - name: Copy daemon config and certs
       ansible.builtin.copy:
-        src: "{{ item }}"
+        src: "{{item}}"
         dest: "/etc/docker/"
-        with_fileglob:
-          - "etc/docker/*"
+      with_items:
+        - "etc/docker/cacert.pem"
+        - "etc/docker/cert.pem"
+        - "etc/docker/daemon.json"
+        - "etc/docker/key.pem"
         
