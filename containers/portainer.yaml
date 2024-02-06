@@ -1,60 +1,15 @@
-- name: install Traefik
+- name: install Portainer
   hosts: host
   gather_facts: false
-  task:
-    - name: Deploy Traefik
+  tasks:
+    - name: Deploy Portainer
       community.docker.docker_container:
-        name: traefik
-        image: traefik:latest
-        network_mode: host
-        labels:
-          - "traefik.http.middlewares.test-auth.forwardauth.trustForwardHeader=true"
-        command:    
-          - --log.level=DEBUG
-          - --log.filePath=/logs/traefik.log
-          - --accesslog=true
-          - --accesslog.filepath=/logs/access.log
-          - --accesslog.format=json
-          #- --entrypoints.web.address=:80
-          - --entrypoints.web-secure.address=:443
-          - --entrypoints.mqtt.address=:1883
-          - --entrypoints.mqtt-secure.address=:8883
-          #- --entrypoints.dns-secure.address=:853
-          #- --entrypoints.imaps.address=:993
-          #- --entrypoints.imap.address=:143
-          #- --entrypoints.pop3.address=:110
-          #- --entrypoints.smtp.address=:25
-          #- --entrypoints.pop3s.address=:995
-          #- --entrypoints.smtps.address=:465
-          - --providers.docker
-          - --providers.docker.exposedbydefault=false
-          - --providers.docker.network=public
-          - --providers.file.directory=/configuration/
-          - --providers.file.watch=true
-          - --api
-          - --api.insecure=true
-          - --api.dashboard=true
-          - --certificatesresolvers.le.acme.email=s.balogh@proforall.ch
-          - --certificatesresolvers.le.acme.storage=/configuration/acme.json
-          - --certificatesresolvers.le.acme.tlschallenge=true
-          - --serverstransport.insecureskipverify=true
-        container_name: traefik
-        environment:
-          AWS_ACCESS_KEY_ID: AKIA6MYX7E7RFAXMNCNI
-          AWS_SECRET_ACCESS_KEY: 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
-          AWS_REGION: us-east-1
-          AWS_HOSTED_ZONE_ID: Z02153267AA8XBTFFM4R
+        name: portainer
+        image: portainer/portainer-ce
         ports:
-          #- "995:995"
-          #- "993:993"
-          #- "465:465"
-          - "443:443"
-          #- "853:853"
-          #- "8080:8080"
-          #- "524:524"
-          #- "8443:8443"
+          - "9000:9000"
+          - "8000:8000"
         volumes:
-          - "/var/run/docker.sock:/var/run/docker.sock:ro"
-          - traefik_configuration:/configuration
-          - traefik_logs:/logs
-        restart: always
+          - /var/run/docker.sock:/var/run/docker.sock
+          - portainer_data:/data
+        restart_policy: always
