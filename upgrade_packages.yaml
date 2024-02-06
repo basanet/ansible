@@ -3,5 +3,6 @@
   gather_facts: yes
   become: false
   tasks:
-    - name: Upgrade
-      apt: state=latest force_apt_get=yes
+    apt:
+      name: "*"
+      state: latest
