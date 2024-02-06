@@ -5,6 +5,6 @@
   tasks:
     - name: Upgrade all packages
       apt:
-        name: *
+        name: "*"
         state: latest
         update_cache: true
