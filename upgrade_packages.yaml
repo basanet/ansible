@@ -16,3 +16,12 @@
       ansible.builtin.reboot:
         reboot_timeout: 300
       when: p.stat.exists
+    - name: Create default private network
+      docker_network:
+        name: private
+        enable_ipv6: yes
+    - name: Create default public network
+      docker_network:
+        name: public
+        enable_ipv6: yes
+      
