@@ -36,12 +36,11 @@
           - --certificatesresolvers.le.acme.storage=/configuration/acme.json
           - --certificatesresolvers.le.acme.tlschallenge=true
           - --serverstransport.insecureskipverify=true
-        container_name: traefik
-        environment:
-          AWS_ACCESS_KEY_ID: AKIA6MYX7E7RFAXMNCNI
-          AWS_SECRET_ACCESS_KEY: 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
-          AWS_REGION: us-east-1
-          AWS_HOSTED_ZONE_ID: Z02153267AA8XBTFFM4R
+        env:
+          - AWS_ACCESS_KEY_ID: AKIA6MYX7E7RFAXMNCNI
+          - AWS_SECRET_ACCESS_KEY: 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
+          - AWS_REGION: us-east-1
+          - AWS_HOSTED_ZONE_ID: Z02153267AA8XBTFFM4R
         ports:
           #- "995:995"
           #- "993:993"
