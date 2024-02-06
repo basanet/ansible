@@ -3,6 +3,7 @@
   gather_facts: yes
   become: false
   tasks:
-    apt:
+    - name: Upgrade to latest
+      apt:
       name: "*"
       state: latest
