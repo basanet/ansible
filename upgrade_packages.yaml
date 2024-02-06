@@ -3,7 +3,8 @@
   gather_facts: yes
   become: false
   tasks:
-    - name: Upgrade to latest
+    - name: Upgrade all packages
       apt:
-      name: "*"
-      state: latest
+        name: *
+        state: latest
+        update_cache: true
