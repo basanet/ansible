@@ -1,0 +1,10 @@
+- name: Create docker networks
+  hosts: host
+  gather_facts: true
+  tasks:
+    - name: Create private Network
+      docker_network:
+        name: private
+        driver_options:
+          com.docker.network.bridge.name: private
+      
