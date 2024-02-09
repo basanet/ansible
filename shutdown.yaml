@@ -1,0 +1,6 @@
+- name: Shutdown hosts
+  hosts: host
+  gather_facts: yes
+  tasks:
+    - name: Unconditionally shut down the machine with all defaults
+      community.general.shutdown:
