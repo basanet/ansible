@@ -40,17 +40,17 @@
       when: "'active' in swarm_status.stdout_lines"
       run_once: true
 
-hosts: swarm_manager_bootstrap[0]
-tasks:
-  - name: initialize swarm cluster
-    shell: >
-      docker swarm init
-      --advertise-addr={{ swarm_iface | default('enp7s0') }}:2377
-    when: "'swarm_manager_operational' not in groups"
-    register: bootstrap_first_node
-
-  - name: add initialized host to swarm_manager_operational group
-    add_host:
-      hostname: "{{ host[0] }}"
-      groups: swarm_manager_operational
-    when: bootstrap_first_node | changed
+  hosts: swarm_manager_bootstrap[0]
+  tasks:
+    - name: initialize swarm cluster
+      shell: >
+        docker swarm init
+        --advertise-addr={{ swarm_iface | default('enp7s0') }}:2377
+      when: "'swarm_manager_operational' not in groups"
+      register: bootstrap_first_node
+  
+    - name: add initialized host to swarm_manager_operational group
+      add_host:
+        hostname: "{{ host[0] }}"
+        groups: swarm_manager_operational
+      when: bootstrap_first_node | changed
