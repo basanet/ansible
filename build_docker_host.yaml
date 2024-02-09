@@ -25,6 +25,7 @@
           - python3-pip
           - virtualenv
           - python3-setuptools
+          - cifs-utils
         state: latest
         update_cache: true
 
