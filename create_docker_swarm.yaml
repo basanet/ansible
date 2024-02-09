@@ -26,3 +26,8 @@
       ansible.builtin.reboot:
         reboot_timeout: 300
       when: p.stat.exists
+
+    - name: determine swarm status
+      shell: >
+        docker info | egrep '^Swarm: ' | cut -d ' ' -f2
+      register: swarm_status
