@@ -1,0 +1,28 @@
+- name: Create Docker Swarm
+  hosts: host
+  gather_facts: yes
+  collections:
+    - community.docker
+  tasks:
+    - name: Install required system packages
+      apt:
+        pkg:
+          - cifs-utils
+        state: latest
+        update_cache: true
+
+    - name: Upgrade all packages
+      apt:
+        name: "*"
+        state: latest
+        update_cache: true
+
+    - name: Check that the reboot-requied exists
+      stat:
+        path: /var/run/reboot-required
+      register: p
+
+    - name: rebooting server
+      ansible.builtin.reboot:
+        reboot_timeout: 300
+      when: p.stat.exists
