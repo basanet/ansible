@@ -40,7 +40,7 @@
       when: "'active' in swarm_status.stdout_lines"
       run_once: true
 
-  hosts: swarm_manager_bootstrap[0]
+  hosts: host[0]
   tasks:
     - name: initialize swarm cluster
       shell: >
