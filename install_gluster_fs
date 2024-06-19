@@ -1,0 +1,9 @@
+- name: install glusterfs
+  hosts: host
+  tasks:
+    - name: install repo
+      ansible.builtin.apt_repository:
+        repo: ppa:gluster/glusterfs-11
+        state: present
+        validate_certs: no
+        
