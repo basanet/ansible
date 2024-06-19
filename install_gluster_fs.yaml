@@ -6,11 +6,10 @@
         repo: ppa:gluster/glusterfs-11
         state: present
         validate_certs: no
-
     - name: Update and upgrade apt packages
       apt:
-      upgrade: yes
-      update_cache: yes
-      cache_valid_time: 86400 #One day
+        upgrade: yes
+        update_cache: yes
+        cache_valid_time: 86400 #One day
 
         
