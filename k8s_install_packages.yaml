@@ -3,6 +3,14 @@
   collections:
     - community.docker
   tasks:
+    - name: Add the overlay and br_netfilter modules
+      modprobe:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - "overlay"
+        - "br_netfilter"
+        
     - name: Install aptitude
       apt:
         name: aptitude
@@ -53,18 +61,28 @@
         name: containerd.io
         state: latest
         update_cache: true
+        
+    - name: Ensure containerd is started and enabled at boot.
+      service:
+        name: containerd
+        state: started
+        enabled: true
 
     - name: Default containerd config
       shell: 'containerd config default > /etc/containerd/config.toml'
 
-    - name: Disable SWAP
-      shell: 'swapoff -a'
+    - name: Disable swap
+      shell:
+        cmd: |
+          swapoff -a
+      args:
+        executable: /bin/bash
 
-    - name: Disable SWAP in fstab
-      replace:
-        path: /etc/fstab
-        regexp: '^([^#].*?\sswap\s+sw\s+.*)$'
-        replace: '# \1'
+    - name: Remove Swap from fstab
+      mount:
+        name: swap
+        fstype: swap
+        state: absent
 
     - name: Install kubernetes packages
       apt:
@@ -77,10 +95,17 @@
         update_cache: true
 
     - name: enable ip forwarding
-    ansible.posix.sysctl:
-      name: net.ipv4.ip_forward
-      value: '1'
-      sysctl_set: true
+      ansible.posix.sysctl:
+        name: net.ipv4.ip_forward
+        value: '1'
+        sysctl_set: true
+        
+    - name: Ensure kubelet is started and enabled at boot.
+      service:
+        name: kubelet
+        state: started
+        enabled: true
+      
     
     
       
