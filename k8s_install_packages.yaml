@@ -40,7 +40,7 @@
         update_cache: true
 
     - name: Default containerd config
-      command: containerd config default > /etc/containerd/config.toml
-        
+      shell: 'containerd config default > /etc/containerd/config.toml'
+      
     
         
