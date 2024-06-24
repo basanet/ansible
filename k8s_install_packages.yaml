@@ -28,9 +28,19 @@
         url: https://download.docker.com/linux/ubuntu/gpg
         state: present
 
+    - name: Add Google GPG apt Key
+      apt_key:
+        url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+        state: present
+
     - name: Add Docker Repository
       apt_repository:
         repo: deb https://download.docker.com/linux/ubuntu focal stable
+        state: present
+
+    - name: Add Kubernetes Repository
+      apt_repository:
+        repo: deb http://apt.kubernetes.io/ kubernetes-focal main
         state: present
 
     - name: Update apt and install containerd
@@ -50,6 +60,16 @@
         path: /etc/fstab
         regexp: '^([^#].*?\sswap\s+sw\s+.*)$'
         replace: '# \1'
+
+    - name: Install kubernetes packages
+      apt:
+        pkg:
+          - kubeadm
+          - kubelet
+          - kubectl
+          - kubernetes-cni
+        state: latest
+        update_cache: true
     
     
       
