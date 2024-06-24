@@ -1,4 +1,4 @@
-- name: install docker
+- name: install containerd
   hosts: host
   collections:
     - community.docker
@@ -19,6 +19,7 @@
           - python3-pip
           - virtualenv
           - python3-setuptools
+          - gnupg
         state: latest
         update_cache: true
 
@@ -32,34 +33,11 @@
         repo: deb https://download.docker.com/linux/ubuntu focal stable
         state: present
 
-    - name: Update apt and install docker-ce
+    - name: Update apt and install containerd
       apt:
-        name: docker-ce
+        name: containerd.io
         state: latest
         update_cache: true
         
-    - name: Copy daemon config and certs
-      ansible.builtin.copy:
-        src: "{{item}}"
-        dest: "/etc/docker/"
-      with_items:
-        - "etc/docker/cacert.pem"
-        - "etc/docker/cert.pem"
-        - "etc/docker/daemon.json"
-        - "etc/docker/key.pem"
-    - name: Create docker daemon directory
-      ansible.builtin.file:
-        path: "/etc/systemd/system/docker.service.d/"
-        state: directory
-    - name: Copy modified daemon
-      ansible.builtin.copy:
-        src: "etc/systemd/system/docker.service.d/override.conf"
-        dest: "/etc/systemd/system/docker.service.d/override.conf"
-    - name: Just force systemd to reread configs (2.4 and above)
-      ansible.builtin.systemd_service:
-        daemon_reload: true
-    - name: restart docker
-      systemd:
-        name: docker
-        state: restarted
+    
         
