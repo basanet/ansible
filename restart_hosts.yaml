@@ -1,0 +1,7 @@
+- name: restart hosts
+  hosts: host
+  gather_facts: yes
+  tasks:
+    - name: Unconditionally reboot all machhines
+      ansible.builtin.reboot:
+        reboot_timeout: 3600
