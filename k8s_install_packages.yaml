@@ -41,6 +41,17 @@
 
     - name: Default containerd config
       shell: 'containerd config default > /etc/containerd/config.toml'
+
+    - name: Disable SWAP
+      shell: 'swapoff -a'
+
+    - name: Disable SWAP in fstab
+      replace:
+        path: /etc/fstab
+        regexp: '^([^#].*?\sswap\s+sw\s+.*)$'
+        replace: '# \1'
+    
+    
       
     
         
