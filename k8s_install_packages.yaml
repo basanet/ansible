@@ -75,6 +75,12 @@
           - kubernetes-cni
         state: latest
         update_cache: true
+
+    - name: enable ip forwarding
+    ansible.posix.sysctl:
+      name: net.ipv4.ip_forward
+      value: '1'
+      sysctl_set: true
     
     
       
