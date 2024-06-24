@@ -45,7 +45,7 @@
 
     - name: Add Kubernetes Repository
       apt_repository:
-        repo: deb http://apt.kubernetes.io/kubernetes-xenial main
+        repo: deb https://pkgs.k8s.io/core:/stable:/v1.30/deb/ /
         state: present
 
     - name: Update apt and install containerd
