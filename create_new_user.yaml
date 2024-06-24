@@ -1,0 +1,16 @@
+- name: create new user basa
+  hosts: host
+  gather_facts: yes
+  become: false
+  tasks:
+    - name: Create user basa
+      ansible.builtin.user:
+        name: basa
+        create_home: yes
+      
+    - name: Add the user basa to sudoers group
+      ansible.builtin.user:
+        name: basa
+        shell: /bin/bash
+        groups: sudo
+        append: yes
