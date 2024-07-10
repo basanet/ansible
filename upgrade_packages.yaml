@@ -3,7 +3,7 @@
   gather_facts: yes
   become: false
   tasks:
-    - Name: Send notification
+    - name: Send notification
       ansible.builtin.uri:
         url: https://ntfy.sh/basanet_lora_test
         method: POST
@@ -21,7 +21,7 @@
       ansible.builtin.reboot:
         reboot_timeout: 300
       when: p.stat.exists
-    - Name: Send notification
+    - name: Send notification
       ansible.builtin.uri:
         url: https://ntfy.sh/basanet_lora_test
         method: POST
