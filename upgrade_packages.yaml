@@ -3,6 +3,11 @@
   gather_facts: yes
   become: false
   tasks:
+    - Name: Send notification
+      ansible.builtin.uri:
+        url: https://ntfy.sh/basanet_lora_test
+        method: POST
+        body: Upgrade started
     - name: Upgrade all packages
       apt:
         name: "*"
@@ -16,3 +21,8 @@
       ansible.builtin.reboot:
         reboot_timeout: 300
       when: p.stat.exists
+    - Name: Send notification
+      ansible.builtin.uri:
+        url: https://ntfy.sh/basanet_lora_test
+        method: POST
+        body: Upgrade finished
